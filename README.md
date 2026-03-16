@@ -1,0 +1,4 @@
+ - API to manage its product inventory.
+ - RESTful API that can be the backbone of an online store, used by internal tools for inventory management and by the public-facing website to display products to customers.
+- Built using Node.js, Express, and Mongoose.
+- The API handles all fundamental CRUD operations and include advanced features like filtering, sorting, and pagination to manage a large and complex product catalog.
