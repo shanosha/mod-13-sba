@@ -7,13 +7,6 @@ const createProduct = async (req, res) => {
         res.status(201).json({message: `Product with id ${newProduct._id} created.`})
     }
     catch(err) {
-        // This is a duplicate key error code
-        if (err.code === 11000) {
-            console.error('Duplicate key error:', err.message);
-            // Parse the error to find the specific field that caused the issue
-            const field = Object.keys(err.keyPattern)[0];
-            return res.status(400).json({message: `Duplicate: That ${field} already exists.`})
-        }
         res.status(400).json({message: err.message})
     }
 }
@@ -65,13 +58,6 @@ const replaceProductById = async (req, res) => {
         res.status(200).json({message: `Product with id ${updatedProduct._id} updated.`})
     }
     catch(err) {
-        // This is a duplicate key error code
-        if (err.code === 11000) {
-            console.error('Duplicate key error:', err.message);
-            // Parse the error to find the specific field that caused the issue
-            const field = Object.keys(err.keyPattern)[0];
-            return res.status(400).json({message: `Duplicate: That ${field} already exists.`})
-        }
         console.error(err.message)
         res.status(404).json({message: err.message})
     }
