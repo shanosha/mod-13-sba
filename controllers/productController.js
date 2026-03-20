@@ -1,6 +1,25 @@
 import Product from '../models/Product.js'
 
+const getRequiredFields = (model) => {
+    const requiredFields = []
+    model.schema.eachPath(filedName => {
+        const schemaProperty = model.schema.path(filedName)
+        if (schemaProperty.options.required) {
+            requiredFields.push(filedName)
+        }
+    })
+    return requiredFields
+}
+
 const createProduct = async (req, res) => {
+    const requiredProperties = getRequiredFields(Product)
+    let missingFields = []
+    for (const field of requiredProperties) {
+        if(!req.body[field]) missingFields.push(field)
+    }
+    if(missingFields.length > 0) {
+        return res.status(400).json({message: `Missing required fields: ${missingFields.join(", ")}`})
+    }
     try {
         const newProduct = await Product.create(req.body)
         console.log(`Product with id ${newProduct._id} created.`)
@@ -50,6 +69,14 @@ const getProductById = async (req, res) => {
 }
 
 const replaceProductById = async (req, res) => {
+    const requiredProperties = getRequiredFields(Product)
+    let missingFields = []
+    for (const field of requiredProperties) {
+        if(!req.body[field]) missingFields.push(field)
+    }
+    if(missingFields.length > 0) {
+        return res.status(400).json({message: `Missing required fields: ${missingFields.join(", ")}`})
+    }
     try {
         const id = req.params.id
         const updatedProduct = await Product.findOneAndReplace({_id: id}, req.body, {new: true, runValidators:true})
